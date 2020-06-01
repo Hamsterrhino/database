@@ -1,0 +1,6 @@
+﻿  time.cpp
+C:\Users\vova.KNJAZ\source\repos\time\time.cpp(390,31): warning C4101: 'e': unreferenced local variable
+C:\Users\vova.KNJAZ\source\repos\time\time.cpp(428,27): warning C4101: 'e': unreferenced local variable
+C:\Users\vova.KNJAZ\source\repos\time\time.cpp(442,27): warning C4101: 'e': unreferenced local variable
+C:\Users\vova.KNJAZ\source\repos\time\time.cpp(452,27): warning C4101: 'e': unreferenced local variable
+  time.vcxproj -> C:\Users\vova.KNJAZ\source\repos\time\Debug\time.exe
