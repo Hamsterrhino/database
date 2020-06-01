@@ -348,118 +348,113 @@ label1:
   while (getline(cin, command)) {
     int comman = 0, flag = 0;
     string data, event, com;
-    if (command.empty()) {
-      goto label1;
-    }
-    for (auto it : command) {
-      if (it != ' ') {
-        switch (flag) {
-        case 0:
-          com.push_back(it);
-          break;
-        case 1:
-          data.push_back(it);
-          break;
-        case 2:
-          event.push_back(it);
-          break;
-        default:
-          break;
-        }
-      } else {
-        switch (flag) {
-        case 0:
-          for (size_t i = 0; i < commands.size(); i++) {
-            if (com == commands[i]) {
-              comman = i + 1;
-              break;
+    if (!command.empty()) {
+      for (auto it : command) {
+        if (it != ' ') {
+          switch (flag) {
+          case 0:
+            com.push_back(it);
+            break;
+          case 1:
+            data.push_back(it);
+            break;
+          case 2:
+            event.push_back(it);
+            break;
+          default:
+            break;
+          }
+        } else {
+          switch (flag) {
+          case 0:
+            for (size_t i = 0; i < commands.size(); i++) {
+              if (com == commands[i]) {
+                comman = i + 1;
+                break;
+              }
             }
-          }
-          if (comman == 0) {
-            cout << "Unknown command: " << com << endl;
+            if (comman == 0) {
+              cout << "Unknown command: " << com << endl;
+              return 0;
+            }
+            flag = 1;
+            break;
+          case 1:
+            if (data.empty()) {
+              return 0;
+            }
+            try {
+              Date date(data);
+            } catch (exception &e) {
+              return 0;
+            }
+            flag = 2;
+            break;
+          case 2:
             return 0;
+            break;
+          default:
+            break;
           }
-          flag = 1;
-          break;
-        case 1:
-          if (data.empty()) {
-            return 0;
+        }
+      }
+      if (data.empty() && com != "Print") {
+        cout << "Unknown command: " << com << endl;
+        return 0;
+      }
+      if (data.size() >= 5 && data.empty()) {
+        for (size_t i = 0; i < commands.size(); i++) {
+          if (com == commands[i]) {
+            comman = i + 1;
+            break;
           }
+        }
+        if (comman == 0) {
+          cout << "Unknown command: " << com << endl;
+          return 0;
+        }
+        switch (comman) {
+        case 1: {
           try {
-            Date date(data);
+            Date date1(data);
+            if (!event.empty()) {
+              db.AddEvent(date1, event);
+            }
           } catch (exception &e) {
             return 0;
           }
-          flag = 2;
           break;
-        case 2:
-          return 0;
+        }
+        case 2: {
+          try {
+            Date date1(data);
+            if (event.empty()) {
+              db.DeleteDate(date1);
+            } else {
+              db.DeleteEvent(date1, event);
+            }
+          } catch (exception &e) {
+            return 0;
+          }
+
+          break;
+        }
+        case 3: {
+          try {
+            Date date1(data);
+            db.Finde(date1);
+          } catch (exception &e) {
+            return 0;
+          }
+          break;
+        }
+        case 4:
+          db.Print();
           break;
         default:
           break;
         }
       }
-    }
-    if (data.empty() && com != "Print") {
-      cout << "Unknown command: " << com << endl;
-      return 0;
-    }
-    if (data.size() < 5 && !data.empty()) {
-      goto label1;
-    }
-    for (size_t i = 0; i < commands.size(); i++) {
-      if (com == commands[i]) {
-        comman = i + 1;
-        break;
-      }
-    }
-    if (comman == 0) {
-      cout << "Unknown command: " << com << endl;
-      return 0;
-    }
-    switch (comman) {
-    case 1: {
-      try {
-        Date date1(data);
-
-        if (event.empty()) {
-          goto label1;
-        }
-        db.AddEvent(date1, event);
-      } catch (exception &e) {
-        return 0;
-      }
-      break;
-    }
-    case 2: {
-      try {
-        Date date1(data);
-
-        if (event.empty()) {
-          db.DeleteDate(date1);
-        } else {
-          db.DeleteEvent(date1, event);
-        }
-      } catch (exception &e) {
-        return 0;
-      }
-
-      break;
-    }
-    case 3: {
-      try {
-        Date date1(data);
-        db.Finde(date1);
-      } catch (exception &e) {
-        return 0;
-      }
-      break;
-    }
-    case 4:
-      db.Print();
-      break;
-    default:
-      break;
     }
   }
   return 0;
