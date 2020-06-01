@@ -344,7 +344,6 @@ int main() {
   vector<string> commands = {"Add", "Del", "Find", "Print"};
 
   string command;
-label1:
   while (getline(cin, command)) {
     int comman = 0, flag = 0;
     string data, event, com;
